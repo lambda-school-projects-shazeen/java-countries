@@ -62,15 +62,27 @@ public class CountryController
         return new ResponseEntity<>(rntCountry, HttpStatus.OK);
     }
 
-    @GetMapping(value = "population/median", produces = {"application/json"})
+    @GetMapping(value = "/population/median", produces = {"application/json"})
     public ResponseEntity<?> findMedianPopulation()
     {
         List<Country> myList = new ArrayList<>();
-        countryrepo.findAll().iterator().forEachRemaining();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
 
         myList.sort((c1, c2) -> (int) (c1.getPopulation() - c2.getPopulation()));
 
         Country rtnCountry = myList.get((myList.size()/2) + 1);
         return new ResponseEntity<>(rtnCountry, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/name/all", produces = {"application/json"})
+    public ResponseEntity<?> getAllCountries()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
+
+        myList.sort((c1, c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
+
+        return new ResponseEntity<>(myList, HttpStatus.OK);
+
     }
 }
