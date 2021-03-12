@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class CountryController
         return new ResponseEntity<>(rtnCountry, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/name/all", produces = {"application/json"})
+    @GetMapping(value = "/names/all", produces = {"application/json"})
     public ResponseEntity<?> getAllCountries()
     {
         List<Country> myList = new ArrayList<>();
@@ -84,5 +85,17 @@ public class CountryController
 
         return new ResponseEntity<>(myList, HttpStatus.OK);
 
+    }
+
+    @GetMapping(value = "/names/start/{letter}", produces = {"application/json"})
+    public ResponseEntity<?> getCountriesWithStartLetter(@PathVariable char letter)
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
+
+        List<Country> rtnList = HelperFunctions.findCountries(myList, c -> c.getName().toUpperCase().charAt(0) == Character.toUpperCase(letter));
+        rtnList.sort((c1,c2) -> c1.getName().compareToIgnoreCase(c2.getName()));
+
+        return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 }
