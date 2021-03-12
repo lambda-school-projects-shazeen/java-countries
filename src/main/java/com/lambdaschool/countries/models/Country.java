@@ -1,12 +1,14 @@
 package com.lambdaschool.countries.models;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "countries")
 public class Country
 {
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
     private long population;
     private long landmasskm2;
