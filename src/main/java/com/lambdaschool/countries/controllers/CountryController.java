@@ -48,4 +48,29 @@ public class CountryController
         Country rntCountry = myList.get(0);
         return new ResponseEntity<>(rntCountry, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/population/max", produces = {"application/json"})
+    public ResponseEntity<?> findMaxPopulation()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining(myList::add);
+
+        myList.sort((c1,c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
+
+        Country rntCountry = myList.get(0);
+
+        return new ResponseEntity<>(rntCountry, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "population/median", produces = {"application/json"})
+    public ResponseEntity<?> findMedianPopulation()
+    {
+        List<Country> myList = new ArrayList<>();
+        countryrepo.findAll().iterator().forEachRemaining();
+
+        myList.sort((c1, c2) -> (int) (c1.getPopulation() - c2.getPopulation()));
+
+        Country rtnCountry = myList.get((myList.size()/2) + 1);
+        return new ResponseEntity<>(rtnCountry, HttpStatus.OK);
+    }
 }
